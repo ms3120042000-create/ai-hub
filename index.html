@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Hub — AI 서비스 모음</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #0d0d12;
+      --bg2:      #13131a;
+      --bg3:      #1a1a24;
+      --surface:  #20202e;
+      --surface2: #282838;
+      --border:   rgba(255,255,255,0.07);
+      --border2:  rgba(255,255,255,0.12);
+      --text:     #e4e4f0;
+      --text2:    #8888a8;
+      --text3:    #5555778;
+      --accent:   #7c6fff;
+      --accent2:  #ff6b9d;
+      --glow:     rgba(124,111,255,0.25);
+      --r:        14px;
+      --sidebar:  230px;
+      --topbar:   60px;
+      --navh:     52px;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter','Noto Sans KR',sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      position: fixed; top:0; left:0; right:0;
+      height: var(--topbar);
+      background: rgba(13,13,18,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap:20px;
+      padding: 0 24px;
+      z-index: 200;
+    }
+    .logo {
+      font-size: 18px; font-weight: 700; letter-spacing: -0.5px; white-space: nowrap;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .search-box {
+      flex: 1; max-width: 380px; position: relative;
+    }
+    .search-box input {
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 24px; padding: 8px 16px 8px 38px;
+      color: var(--text); font-size: 13.5px; font-family: inherit;
+      outline: none; transition: border-color .2s, box-shadow .2s;
+    }
+    .search-box input::placeholder { color: var(--text2); }
+    .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow); }
+    .search-box .ico {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      color: var(--text2); font-size: 13px; pointer-events: none;
+    }
+    .total-badge {
+      margin-left: auto; white-space: nowrap;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 4px 13px; border-radius: 20px; font-size: 12px; color: var(--text2);
+    }
+    .total-badge span { color: var(--accent); font-weight: 600; }
+
+    /* ── CATEGORY NAV ── */
+    .cat-nav {
+      position: fixed; top: var(--topbar); left:0; right:0;
+      height: var(--navh);
+      background: rgba(19,19,26,0.92);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 4px;
+      padding: 0 20px; overflow-x: auto;
+      z-index: 199;
+    }
+    .cat-nav::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 16px; border-radius: 24px;
+      border: 1px solid transparent; background: none;
+      color: var(--text2); font-size: 13.5px; font-weight: 500;
+      cursor: pointer; white-space: nowrap; font-family: inherit;
+      transition: all .18s;
+    }
+    .cat-btn:hover { background: var(--surface); color: var(--text); border-color: var(--border2); }
+    .cat-btn.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff; font-weight: 600; border-color: transparent;
+      box-shadow: 0 4px 20px rgba(124,111,255,0.35);
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      padding-top: calc(var(--topbar) + var(--navh));
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar); flex-shrink: 0;
+      position: fixed;
+      top: calc(var(--topbar) + var(--navh)); bottom: 0; left: 0;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      overflow-y: auto; padding: 18px 10px;
+    }
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+    .sidebar-label {
+      font-size: 9.5px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--text2);
+      padding: 2px 10px 10px; margin-top: 4px;
+    }
+    .sub-btn {
+      display: flex; align-items: center; gap: 8px; width: 100%;
+      padding: 9px 12px; border-radius: 10px;
+      border: none; background: none;
+      color: var(--text2); font-size: 13px; font-weight: 400;
+      cursor: pointer; text-align: left; font-family: inherit;
+      transition: all .15s; margin-bottom: 2px;
+    }
+    .sub-btn:hover { background: var(--bg3); color: var(--text); }
+    .sub-btn.active { background: rgba(124,111,255,0.13); color: #a097ff; font-weight: 600; }
+    .sub-btn .cnt {
+      margin-left: auto; font-size: 11px; font-weight: 500;
+      background: var(--surface2); color: var(--text2);
+      padding: 1px 8px; border-radius: 10px; min-width: 24px; text-align: center;
+    }
+    .sub-btn.active .cnt { background: rgba(124,111,255,0.2); color: var(--accent); }
+
+    /* ── MAIN ── */
+    .main { flex: 1; margin-left: var(--sidebar); padding: 28px 24px 48px; }
+
+    .sec-header { margin-bottom: 22px; }
+    .sec-header h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; margin-bottom: 5px; }
+    .sec-header p  { color: var(--text2); font-size: 13px; }
+
+    .sub-section { margin-bottom: 30px; }
+    .sub-title {
+      font-size: 12px; font-weight: 700; color: var(--text2);
+      letter-spacing: 0.8px; text-transform: uppercase;
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .sub-title::after { content:''; flex:1; height:1px; background: var(--border); }
+
+    /* ── CARDS ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(252px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      display: block; text-decoration: none; color: inherit;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      border-top: 3px solid var(--cc, var(--accent));
+      padding: 18px 18px 14px;
+      transition: transform .22s, box-shadow .22s, border-color .22s;
+      position: relative; overflow: hidden;
+    }
+    .card::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 0%, var(--cc, var(--accent)) 0%, transparent 60%);
+      opacity: 0; transition: opacity .22s; pointer-events: none;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--border2);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .card:hover::after { opacity: 0.055; }
+
+    .card-head { display: flex; align-items: center; gap: 13px; margin-bottom: 12px; }
+    .card-logo {
+      width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+      background: var(--surface2); display: flex; align-items: center; justify-content: center;
+      font-size: 22px; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .card-logo img { width: 28px; height: 28px; object-fit: contain; }
+    .card-meta { flex: 1; min-width: 0; }
+    .card-name {
+      font-size: 14.5px; font-weight: 700; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .badge-row { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .tag {
+      display: inline-block; font-size: 10.5px; font-weight: 500;
+      padding: 2px 8px; border-radius: 6px;
+      background: var(--surface2); color: var(--text2);
+    }
+    .new-badge {
+      font-size: 9.5px; font-weight: 700; letter-spacing: 0.5px;
+      padding: 2px 6px; border-radius: 5px; text-transform: uppercase;
+    }
+    .new-badge.hot { background: rgba(255,107,107,0.2); color: #ff6b6b; }
+    .new-badge.new { background: rgba(124,111,255,0.2); color: #a097ff; }
+
+    .card-desc { font-size: 12.5px; color: var(--text2); line-height: 1.65; margin-bottom: 14px; }
+
+    .card-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border); padding-top: 11px;
+    }
+    .card-domain { font-size: 11px; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex:1; }
+    .go-btn {
+      flex-shrink: 0; margin-left: 10px;
+      background: var(--surface2); border: 1px solid var(--border2);
+      color: var(--text2); padding: 5px 13px; border-radius: 8px;
+      font-size: 11.5px; font-weight: 600;
+      transition: background .18s, color .18s, border-color .18s;
+    }
+    .card:hover .go-btn {
+      background: var(--accent); border-color: var(--accent);
+      color: #fff; box-shadow: 0 4px 14px rgba(124,111,255,0.4);
+    }
+
+    /* ── NO RESULTS ── */
+    .empty { text-align: center; padding: 80px 20px; color: var(--text2); }
+    .empty .ei { font-size: 52px; margin-bottom: 16px; }
+    .empty h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 20px 14px 40px; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+    }
+    @media (max-width: 600px) {
+      .logo { font-size: 15px; }
+      .total-badge { display: none; }
+      .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .card { padding: 14px 14px 10px; }
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text2); }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo">⚡ AI Hub</div>
+  <div class="search-box">
+    <span class="ico">🔍</span>
+    <input id="q" type="text" placeholder="서비스 이름, 설명 검색...">
+  </div>
+  <div class="total-badge" id="badge"><span id="cnt">0</span> 개 서비스</div>
+</header>
+
+<nav class="cat-nav" id="catNav"></nav>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+const S = [
+  // ── AI 어시스턴트 > 대화형 AI ──────────────────────────────────────────
+  { n:"Claude",           d:"Anthropic의 AI 어시스턴트. 글쓰기·분석·코딩 전반에 걸쳐 정교한 답변 제공",          u:"https://claude.ai",                         c:"AI 어시스턴트", s:"대화형 AI",      color:"#cc785c" },
+  { n:"ChatGPT",          d:"OpenAI의 대화형 AI. 전 세계에서 가장 널리 사용되는 AI 서비스",                   u:"https://chatgpt.com",                       c:"AI 어시스턴트", s:"대화형 AI",      color:"#10a37f" },
+  { n:"Gemini",           d:"Google의 멀티모달 AI. 텍스트·이미지·코드·동영상 처리 및 Google 서비스 통합",       u:"https://gemini.google.com",                 c:"AI 어시스턴트", s:"대화형 AI",      color:"#4285f4" },
+  { n:"Grok",             d:"xAI(일론 머스크)의 대화형 AI. 실시간 X(트위터) 정보 접근 가능",                  u:"https://grok.x.ai",                         c:"AI 어시스턴트", s:"대화형 AI",      color:"#1da1f2", badge:"new" },
+  { n:"Genspark",         d:"AI 기반 스마트 검색 및 에이전트 플랫폼. 자동화된 리서치 특화",                    u:"https://www.genspark.ai",                   c:"AI 어시스턴트", s:"대화형 AI",      color:"#ff6b35", badge:"new" },
+  { n:"Microsoft Copilot",d:"Microsoft의 AI 어시스턴트. Bing 검색·Office 365·Windows 전반 통합",             u:"https://copilot.microsoft.com",             c:"AI 어시스턴트", s:"대화형 AI",      color:"#0078d4" },
+  { n:"Meta AI",          d:"Meta의 AI 어시스턴트. WhatsApp·Instagram·Facebook에서 직접 사용",               u:"https://www.meta.ai",                       c:"AI 어시스턴트", s:"대화형 AI",      color:"#0866ff" },
+  { n:"DeepSeek",         d:"중국 DeepSeek의 고성능 오픈소스 AI 모델. 코딩·수학 특화",                        u:"https://chat.deepseek.com",                 c:"AI 어시스턴트", s:"대화형 AI",      color:"#4f6ef7", badge:"hot" },
+
+  // ── AI 어시스턴트 > 검색 AI ─────────────────────────────────────────────
+  { n:"Perplexity",       d:"AI 기반 검색 엔진. 출처를 인용하며 정확하고 신뢰할 수 있는 답변 제공",            u:"https://www.perplexity.ai",                 c:"AI 어시스턴트", s:"검색 AI",        color:"#20b2aa" },
+  { n:"You.com",          d:"AI 통합 개인화 검색. 다양한 AI 모드 및 앱을 검색과 함께 제공",                   u:"https://you.com",                           c:"AI 어시스턴트", s:"검색 AI",        color:"#6c63ff" },
+  { n:"Phind",            d:"개발자를 위한 AI 코드 검색 엔진. 기술 문서·스택오버플로우 기반",                  u:"https://www.phind.com",                     c:"AI 어시스턴트", s:"검색 AI",        color:"#7c3aed" },
+
+  // ── AI 이미지 > 이미지 생성 ─────────────────────────────────────────────
+  { n:"Whisk",            d:"Google의 이미지 생성 AI. 이미지를 드래그해 새로운 스타일로 합성",                 u:"https://labs.google/fx/tools/whisk",        c:"AI 이미지",   s:"이미지 생성",    color:"#fbbc04", badge:"new" },
+  { n:"Midjourney",       d:"최고 품질 AI 이미지 생성. 예술적·사실적 스타일 모두 탁월",                       u:"https://www.midjourney.com",                c:"AI 이미지",   s:"이미지 생성",    color:"#5865f2" },
+  { n:"DALL-E 3",         d:"OpenAI의 텍스트→이미지 생성 AI. ChatGPT에 통합",                                u:"https://openai.com/dall-e-3",               c:"AI 이미지",   s:"이미지 생성",    color:"#10a37f" },
+  { n:"Stable Diffusion", d:"Stability AI의 오픈소스 이미지 생성 모델. 로컬 실행 가능",                       u:"https://stability.ai",                      c:"AI 이미지",   s:"이미지 생성",    color:"#7c3aed" },
+  { n:"Adobe Firefly",    d:"Adobe의 크리에이티브 AI. 상업적 이용 안전 보장·Creative Cloud 통합",             u:"https://firefly.adobe.com",                 c:"AI 이미지",   s:"이미지 생성",    color:"#e42e13" },
+  { n:"Leonardo AI",      d:"게임·웹툰·제품 디자인에 특화된 AI 이미지 생성 플랫폼",                           u:"https://leonardo.ai",                       c:"AI 이미지",   s:"이미지 생성",    color:"#d45c3a" },
+  { n:"Flux",             d:"Black Forest Labs의 차세대 오픈소스 이미지 생성 모델",                           u:"https://blackforestlabs.ai",                c:"AI 이미지",   s:"이미지 생성",    color:"#2d2d3a", badge:"hot" },
+
+  // ── AI 이미지 > 디자인 AI ───────────────────────────────────────────────
+  { n:"Canva AI",         d:"AI 탑재 디자인 플랫폼. 비전문가도 전문가 수준 디자인 가능",                      u:"https://www.canva.com",                     c:"AI 이미지",   s:"디자인 AI",      color:"#00c4cc" },
+  { n:"Ideogram",         d:"텍스트 렌더링이 강한 AI 이미지 생성. 로고·포스터 제작에 탁월",                   u:"https://ideogram.ai",                       c:"AI 이미지",   s:"디자인 AI",      color:"#ff4500" },
+  { n:"Recraft",          d:"벡터·SVG·브랜드 디자인 특화 AI 이미지 생성 도구",                               u:"https://www.recraft.ai",                    c:"AI 이미지",   s:"디자인 AI",      color:"#6366f1" },
+
+  // ── AI 음악/영상 > 음악 생성 ─────────────────────────────────────────────
+  { n:"SUNO",             d:"텍스트 입력만으로 보컬 포함 완성 음악 생성. 다양한 장르 지원",                   u:"https://suno.com",                          c:"AI 음악/영상", s:"음악 생성",      color:"#ff6b6b", badge:"hot" },
+  { n:"Udio",             d:"고품질 AI 음악 작곡 도구. 전문가 수준의 사운드 생성",                            u:"https://www.udio.com",                      c:"AI 음악/영상", s:"음악 생성",      color:"#845ec2" },
+  { n:"Mubert",           d:"AI 기반 실시간 음악 생성. 유튜브·팟캐스트 BGM 제작",                            u:"https://mubert.com",                        c:"AI 음악/영상", s:"음악 생성",      color:"#4a90d9" },
+
+  // ── AI 음악/영상 > 영상 생성 ─────────────────────────────────────────────
+  { n:"Runway",           d:"AI 영상 생성·편집의 선두주자. Gen-4 Turbo 모델로 최고 품질",                    u:"https://runwayml.com",                      c:"AI 음악/영상", s:"영상 생성",      color:"#ff6b35", badge:"hot" },
+  { n:"Pika",             d:"텍스트·이미지를 생동감 있는 영상으로 변환하는 AI 도구",                          u:"https://pika.art",                          c:"AI 음악/영상", s:"영상 생성",      color:"#e91e63" },
+  { n:"HeyGen",           d:"AI 아바타 영상 제작. 40개 이상 언어 자동 더빙·립싱크",                          u:"https://www.heygen.com",                    c:"AI 음악/영상", s:"영상 생성",      color:"#2196f3" },
+  { n:"Sora",             d:"OpenAI의 텍스트→영상 생성 AI. 고품질 시네마틱 영상 제작",                       u:"https://sora.com",                          c:"AI 음악/영상", s:"영상 생성",      color:"#10a37f", badge:"new" },
+  { n:"Kling AI",         d:"Kuaishou의 고품질 AI 영상 생성. 사실적인 모션 특화",                            u:"https://klingai.com",                       c:"AI 음악/영상", s:"영상 생성",      color:"#ff4081", badge:"hot" },
+  { n:"Vidu",             d:"Shengshu AI의 영상 생성 모델. 일관성 있는 캐릭터 영상",                         u:"https://www.vidu.io",                       c:"AI 음악/영상", s:"영상 생성",      color:"#9c27b0" },
+
+  // ── AI 코딩 > 코드 어시스턴트 ───────────────────────────────────────────
+  { n:"GitHub Copilot",   d:"GitHub/Microsoft의 AI 코드 자동완성. VS Code·JetBrains 등 지원",               u:"https://github.com/features/copilot",       c:"AI 코딩",     s:"코드 어시스턴트", color:"#6e7681" },
+  { n:"Cursor",           d:"AI 기반 VS Code 호환 에디터. 자연어로 코드 작성·리팩토링",                      u:"https://www.cursor.com",                    c:"AI 코딩",     s:"코드 어시스턴트", color:"#8b5cf6", badge:"hot" },
+  { n:"Windsurf",         d:"Codeium의 AI 코드 에디터. Cascade Flow 에이전트 내장",                          u:"https://codeium.com/windsurf",              c:"AI 코딩",     s:"코드 어시스턴트", color:"#00d4ff" },
+  { n:"Replit",           d:"브라우저 기반 AI 코딩 플랫폼. 즉시 실행·배포 가능",                             u:"https://replit.com",                        c:"AI 코딩",     s:"코드 어시스턴트", color:"#f26207" },
+  { n:"Claude Code",      d:"Anthropic의 CLI 기반 AI 코딩 에이전트. 전체 코드베이스 분석",                   u:"https://claude.ai/code",                    c:"AI 코딩",     s:"코드 어시스턴트", color:"#cc785c", badge:"new" },
+
+  // ── AI 코딩 > 웹 빌더 ──────────────────────────────────────────────────
+  { n:"Lovable",          d:"자연어로 풀스택 React 웹앱을 만드는 AI 빌더",                                   u:"https://lovable.dev",                       c:"AI 코딩",     s:"웹 빌더",        color:"#ff4b8b", badge:"hot" },
+  { n:"V0",               d:"Vercel의 AI UI 컴포넌트 생성기. React + Tailwind CSS 출력",                    u:"https://v0.dev",                            c:"AI 코딩",     s:"웹 빌더",        color:"#9898a8", badge:"hot" },
+  { n:"Bolt.new",         d:"StackBlitz의 AI 풀스택 웹 빌더. 브라우저에서 즉시 배포",                        u:"https://bolt.new",                          c:"AI 코딩",     s:"웹 빌더",        color:"#7c3aed", badge:"hot" },
+  { n:"Vercel",           d:"Next.js 창시자의 프론트엔드 배포 플랫폼. AI 기능 내장",                         u:"https://vercel.com",                        c:"AI 코딩",     s:"웹 빌더",        color:"#9898a8" },
+
+  // ── AI 리소스 > 모델 허브 ───────────────────────────────────────────────
+  { n:"Hugging Face",     d:"AI 모델·데이터셋·스페이스의 최대 오픈소스 허브. 50만+ 모델",                   u:"https://huggingface.co",                    c:"AI 리소스",   s:"모델 허브",      color:"#ffd700" },
+  { n:"GitHub",           d:"세계 최대 코드 저장소. AI 프로젝트 탐색·협업·버전 관리",                        u:"https://github.com",                        c:"AI 리소스",   s:"모델 허브",      color:"#6e7681" },
+  { n:"Ollama",           d:"로컬에서 오픈소스 LLM을 쉽게 실행. Llama·Mistral·Gemma 지원",                  u:"https://ollama.ai",                         c:"AI 리소스",   s:"모델 허브",      color:"#4a90d9" },
+  { n:"LM Studio",        d:"로컬 AI 모델 실행을 위한 데스크톱 앱. 직관적인 UI 제공",                        u:"https://lmstudio.ai",                       c:"AI 리소스",   s:"모델 허브",      color:"#6366f1" },
+
+  // ── AI 리소스 > 개발 플랫폼 ─────────────────────────────────────────────
+  { n:"Google AI Studio", d:"Gemini API 개발·테스트·프로토타이핑 플랫폼. 무료 티어 제공",                    u:"https://aistudio.google.com",               c:"AI 리소스",   s:"개발 플랫폼",    color:"#4285f4" },
+  { n:"OpenAI Platform",  d:"GPT·DALL-E·Whisper·Sora 등 OpenAI API 관리 및 개발 플랫폼",                   u:"https://platform.openai.com",               c:"AI 리소스",   s:"개발 플랫폼",    color:"#10a37f" },
+  { n:"Anthropic Console",d:"Claude API 개발 콘솔. Workbench에서 프롬프트 설계 및 테스트",                  u:"https://console.anthropic.com",             c:"AI 리소스",   s:"개발 플랫폼",    color:"#cc785c" },
+  { n:"Groq",             d:"초고속 AI 추론 플랫폼. LPU 기반으로 업계 최빠른 응답 속도",                     u:"https://groq.com",                          c:"AI 리소스",   s:"개발 플랫폼",    color:"#f55036" },
+  { n:"Together AI",      d:"오픈소스 모델 파인튜닝·추론·배포 클라우드 플랫폼",                              u:"https://www.together.ai",                   c:"AI 리소스",   s:"개발 플랫폼",    color:"#6366f1" },
+];
+
+const CAT_ICONS = {
+  "AI 어시스턴트":"🤖", "AI 이미지":"🎨", "AI 음악/영상":"🎵", "AI 코딩":"💻", "AI 리소스":"📚"
+};
+const CATS = [...new Set(S.map(s=>s.c))];
+
+let activeCat = CATS[0];
+let activeSub = "전체";
+
+// ── helpers ──────────────────────────────────────────────────────────────────
+const getSubs = cat => ["전체", ...new Set(S.filter(s=>s.c===cat).map(s=>s.s))];
+const getFav  = url => { try { return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=64`; } catch{return "";} };
+const getDom  = url => { try { return new URL(url).hostname.replace("www.",""); } catch{return url;} };
+const q = () => document.getElementById("q").value.toLowerCase();
+
+function filtered() {
+  const qv = q();
+  if (qv) return S.filter(s => s.n.toLowerCase().includes(qv) || s.d.toLowerCase().includes(qv) || s.s.toLowerCase().includes(qv) || s.c.toLowerCase().includes(qv));
+  return S.filter(s => s.c === activeCat && (activeSub === "전체" || s.s === activeSub));
+}
+
+// ── render ────────────────────────────────────────────────────────────────────
+function renderNav() {
+  document.getElementById("catNav").innerHTML = CATS.map(cat =>
+    `<button class="cat-btn${cat===activeCat?" active":""}" onclick="selCat('${cat}')">${CAT_ICONS[cat]||"📌"} ${cat}</button>`
+  ).join("");
+}
+
+function renderSidebar() {
+  const subs = getSubs(activeCat);
+  document.getElementById("sidebar").innerHTML =
+    `<div class="sidebar-label">카테고리</div>` +
+    subs.map(s => {
+      const cnt = s==="전체" ? S.filter(x=>x.c===activeCat).length : S.filter(x=>x.c===activeCat&&x.s===s).length;
+      return `<button class="sub-btn${s===activeSub?" active":""}" onclick="selSub('${s}')">${s}<span class="cnt">${cnt}</span></button>`;
+    }).join("");
+}
+
+function renderCard(s) {
+  const badgeHtml = s.badge
+    ? `<span class="new-badge ${s.badge}">${s.badge==="hot"?"🔥 HOT":"✨ NEW"}</span>`
+    : "";
+  return `<a class="card" href="${s.u}" target="_blank" rel="noopener noreferrer" style="--cc:${s.color}">
+    <div class="card-head">
+      <div class="card-logo" style="border-color:${s.color}33">
+        <img src="${getFav(s.u)}" alt="${s.n}" onerror="this.parentNode.innerHTML='<span style=font-size:22px>🔗</span>'">
+      </div>
+      <div class="card-meta">
+        <div class="card-name">${s.n}</div>
+        <div class="badge-row"><span class="tag">${s.s}</span>${badgeHtml}</div>
+      </div>
+    </div>
+    <div class="card-desc">${s.d}</div>
+    <div class="card-foot">
+      <span class="card-domain">${getDom(s.u)}</span>
+      <span class="go-btn">방문하기 →</span>
+    </div>
+  </a>`;
+}
+
+function renderMain() {
+  const list = filtered();
+  const main = document.getElementById("main");
+  const cnt  = document.getElementById("cnt");
+  cnt.textContent = list.length;
+
+  if (!list.length) {
+    main.innerHTML = `<div class="empty"><div class="ei">🔍</div><h3>검색 결과 없음</h3><p>다른 키워드로 검색해 보세요</p></div>`;
+    return;
+  }
+
+  const qv = q();
+
+  if (qv) {
+    main.innerHTML = `
+      <div class="sec-header"><h2>🔍 "${document.getElementById("q").value}" 검색 결과</h2><p>${list.length}개 서비스</p></div>
+      <div class="grid">${list.map(renderCard).join("")}</div>`;
+    return;
+  }
+
+  if (activeSub !== "전체") {
+    main.innerHTML = `
+      <div class="sec-header"><h2>${CAT_ICONS[activeCat]} ${activeCat}</h2><p>${activeSub} · ${list.length}개 서비스</p></div>
+      <div class="grid">${list.map(renderCard).join("")}</div>`;
+    return;
+  }
+
+  const subs = [...new Set(list.map(s=>s.s))];
+  main.innerHTML = `
+    <div class="sec-header"><h2>${CAT_ICONS[activeCat]} ${activeCat}</h2><p>${subs.length}개 분류 · ${list.length}개 서비스</p></div>` +
+    subs.map(sub => {
+      const items = list.filter(s=>s.s===sub);
+      return `<div class="sub-section"><div class="sub-title">${sub}</div><div class="grid">${items.map(renderCard).join("")}</div></div>`;
+    }).join("");
+}
+
+function render() { renderNav(); renderSidebar(); renderMain(); }
+
+function selCat(cat) { activeCat=cat; activeSub="전체"; render(); }
+function selSub(sub) { activeSub=sub; renderSidebar(); renderMain(); }
+
+document.getElementById("q").addEventListener("input", renderMain);
+
+render();
+</script>
+</body>
+</html>

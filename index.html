@@ -342,10 +342,38 @@ const S = [
   { n:"Anthropic Console",d:"Claude API 개발 콘솔. Workbench에서 프롬프트 설계 및 테스트",                  u:"https://console.anthropic.com",             c:"AI 리소스",   s:"개발 플랫폼",    color:"#cc785c" },
   { n:"Groq",             d:"초고속 AI 추론 플랫폼. LPU 기반으로 업계 최빠른 응답 속도",                     u:"https://groq.com",                          c:"AI 리소스",   s:"개발 플랫폼",    color:"#f55036" },
   { n:"Together AI",      d:"오픈소스 모델 파인튜닝·추론·배포 클라우드 플랫폼",                              u:"https://www.together.ai",                   c:"AI 리소스",   s:"개발 플랫폼",    color:"#6366f1" },
+  { n:"OpenRouter",       d:"하나의 API 키로 Claude·GPT·Gemini 등 100+ AI 모델 라우팅",                       u:"https://openrouter.ai",                     c:"AI 리소스",   s:"개발 플랫폼",    color:"#7c5cff", badge:"hot" },
+  { n:"Replicate",        d:"오픈소스 AI 모델을 클라우드 API로 즉시 실행. 이미지·영상·오디오",                 u:"https://replicate.com",                     c:"AI 리소스",   s:"개발 플랫폼",    color:"#0ea5e9" },
+  { n:"Dify",             d:"노코드 AI 앱·챗봇·에이전트 개발 플랫폼. 오픈소스",                               u:"https://dify.ai",                           c:"AI 리소스",   s:"개발 플랫폼",    color:"#2563eb", badge:"hot" },
+
+  // ── AI 리소스 > 자동화 ──────────────────────────────────────────────────────
+  { n:"n8n",              d:"AI 연동 워크플로우 자동화 도구. 오픈소스·셀프호스팅 가능",                        u:"https://n8n.io",                            c:"AI 리소스",   s:"자동화",         color:"#ea4b71", badge:"hot" },
+  { n:"Make",             d:"AI 서비스 간 연동 자동화 플랫폼. 1,000+ 앱 연결 지원",                           u:"https://make.com",                          c:"AI 리소스",   s:"자동화",         color:"#6d1ed4" },
+
+  // ── AI 어시스턴트 > 대화형 AI (추가) ────────────────────────────────────────
+  { n:"Poe",              d:"Claude·GPT·Gemini 등 여러 AI 모델을 한 곳에서 비교·사용",                        u:"https://poe.com",                           c:"AI 어시스턴트", s:"대화형 AI",     color:"#7856ff" },
+  { n:"Character.AI",     d:"나만의 AI 캐릭터 제작 및 대화. 크리에이터 커뮤니티 활성",                        u:"https://character.ai",                      c:"AI 어시스턴트", s:"대화형 AI",     color:"#09a9e0" },
+
+  // ── AI 어시스턴트 > 생산성 AI ───────────────────────────────────────────────
+  { n:"NotebookLM",       d:"Google의 AI 리서치 노트. PDF·문서 업로드 후 질문·요약·팟캐스트 생성",            u:"https://notebooklm.google.com",             c:"AI 어시스턴트", s:"생산성 AI",     color:"#4285f4", badge:"hot" },
+  { n:"Gamma",            d:"텍스트 입력만으로 PPT·프레젠테이션·문서를 자동 생성",                            u:"https://gamma.app",                         c:"AI 어시스턴트", s:"생산성 AI",     color:"#7c3aed", badge:"hot" },
+  { n:"Notion AI",        d:"AI 통합 올인원 업무 관리. 문서 작성·요약·번역·데이터베이스",                      u:"https://notion.so",                         c:"AI 어시스턴트", s:"생산성 AI",     color:"#000000" },
+
+  // ── AI 음악/영상 > 음성 생성 ─────────────────────────────────────────────────
+  { n:"ElevenLabs",       d:"AI 음성 생성·복제 서비스. 한국어 포함 32개 언어, 자연스러운 감정 표현",          u:"https://elevenlabs.io",                     c:"AI 음악/영상", s:"음성 생성",     color:"#f97316", badge:"hot" },
+
+  // ── AI 음악/영상 > 영상 생성 (추가) ─────────────────────────────────────────
+  { n:"Luma AI",          d:"Dream Machine 고품질 영상 생성 + 3D 오브젝트 캡처",                              u:"https://lumalabs.ai",                       c:"AI 음악/영상", s:"영상 생성",     color:"#00d4ff", badge:"new" },
+  { n:"Descript",         d:"자막 편집으로 영상 편집. AI 음성 복제·노이즈 제거·오버더빙",                      u:"https://descript.com",                      c:"AI 음악/영상", s:"영상 생성",     color:"#7c3aed" },
+
+  // ── AI 이미지 > 이미지 생성 (추가) ──────────────────────────────────────────
+  { n:"Krea AI",          d:"실시간 AI 이미지 생성. 즉각적인 피드백으로 빠른 반복 작업",                       u:"https://krea.ai",                           c:"AI 이미지",   s:"이미지 생성",    color:"#e879f9", badge:"hot" },
+  { n:"Civitai",          d:"Stable Diffusion 모델·LoRA·임베딩 공유 커뮤니티 허브",                          u:"https://civitai.com",                       c:"AI 이미지",   s:"이미지 생성",    color:"#3b82f6" },
 ];
 
 const CAT_ICONS = {
-  "AI 어시스턴트":"🤖", "AI 이미지":"🎨", "AI 음악/영상":"🎵", "AI 코딩":"💻", "AI 리소스":"📚"
+  "AI 어시스턴트":"🤖", "AI 이미지":"🎨", "AI 음악/영상":"🎵", "AI 코딩":"💻", "AI 리소스":"📚",
+  "생산성 AI":"📝", "자동화":"⚙️", "음성 생성":"🎙️"
 };
 const CATS = [...new Set(S.map(s=>s.c))];
 

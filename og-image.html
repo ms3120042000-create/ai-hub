@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      width: 1200px; height: 630px; overflow: hidden;
+      background: #0b0b10;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      background-image:
+        radial-gradient(ellipse 60% 50% at 10% 20%, rgba(124,111,255,0.2) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 90% 80%, rgba(255,107,157,0.15) 0%, transparent 50%);
+    }
+    .box { text-align: center; }
+    .logo { font-size: 72px; margin-bottom: 24px; }
+    h1 {
+      font-size: 64px; font-weight: 800; letter-spacing: -2px;
+      background: linear-gradient(135deg, #7c6fff, #ff6b9d);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+    p { font-size: 28px; color: #8888a8; }
+    .tags { display: flex; gap: 12px; justify-content: center; margin-top: 32px; flex-wrap: wrap; }
+    .tag {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      padding: 8px 20px; border-radius: 24px; font-size: 20px; color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="logo">⚡</div>
+    <h1>AI Hub</h1>
+    <p>63개 AI 서비스를 한눈에 — ChatGPT · Claude · Gemini · Midjourney · SUNO</p>
+    <div class="tags">
+      <span class="tag">🤖 AI 어시스턴트</span>
+      <span class="tag">🎨 AI 이미지</span>
+      <span class="tag">🎵 AI 음악/영상</span>
+      <span class="tag">💻 AI 코딩</span>
+      <span class="tag">📚 AI 리소스</span>
+    </div>
+  </div>
+</body>
+</html>
